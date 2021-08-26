@@ -13,7 +13,6 @@
  const {username, room} = Qs.parse(location.search, {ignoreQueryPrefix: true})
  // Function for autoscrall
  const autoscroll = () => {
-
       // New message element
       const $newMessage = $messages.lastElementChild
 
