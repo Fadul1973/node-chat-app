@@ -18,17 +18,15 @@ app.use(express.static(publicadairectoryPath))
 // when server has been connected
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
-
     // To join user when you click join in the first page
-    socket.on('join', (Options, callback) => {
-        const {error,user} = addUser({id:socket.id, ...Options}) // adding user
+    socket.on('join', (options, callback) => {
+        const {error,user} = addUser({id:socket.id, ...options}) // adding user
         
         if(error) {
             return callback(error)
         }
 
         socket.join(user.room)
-
         socket.emit('message', generateMessage('Admin','Welcome!'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`))
         io.to(user.room).emit('roomData', {
@@ -36,7 +34,6 @@ io.on('connection', (socket) => {
             users: getUsersInRoom(user.room)
         })
         callback()
-
     })
 
     socket.on('sendMessage', (message, callback) => {
@@ -60,12 +57,13 @@ io.on('connection', (socket) => {
         // removing the user and store it in a variable user
         const user = removeUser(socket.id)
 
-        if(user) {
-            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left`))
+        if (user) {
+            io.to(user.room).emit('message', generateMessage( 'Admin', `${user.username} has left!`))
             io.to(user.room).emit('roomData', {
                 room: user.room,
                 users: getUsersInRoom(user.room)
             })
+            //callback()
         }      
     })
 })

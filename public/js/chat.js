@@ -33,10 +33,10 @@
       if(containerHeight - newMessageHeight >= scrollOffset) {
           $messages.scrollTop = $messages.scrollHeight
       }
- }
-
+    }
 socket.on('message', (message) => {
     const html = Mustache.render(messageTemplate, {
+        // to setup messages on this object
         username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')// to change the time stamp to something readable
@@ -94,6 +94,7 @@ socket.on('roomData', ({room, users}) => {
     $sendLocationButton.setAttribute('disabled', 'disabled')
 
     navigator.geolocation.getCurrentPosition((position) => {
+    
         socket.emit('sendLocation', {
             latitude: position.coords.latitude, 
             longitude: position.coords.longitude   
