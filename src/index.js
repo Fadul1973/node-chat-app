@@ -41,7 +41,8 @@ io.on('connection', (socket) => {
         const filtter = new Filtter()
 
         if(filtter.isProfane(message)){
-            return callback('Profanity is not allowed!')
+            io.to(user.room).emit('message', generateMessage( 'Admin', ` Hey ${user.username} !! Profanity is not allowed!`))
+            return callback('Profanity is not allowed!') 
         }
         io.to(user.room).emit('message', generateMessage(user.username, message))
         callback()
